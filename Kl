@@ -1,5 +1,4 @@
--- Premium Access Prompt | Professional Edition
--- Clean UI, Minimalist, Zero Infantil
+-- Premium Access Prompt | Adult / Minimal / Professional
 
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
@@ -10,55 +9,98 @@ local player = Players.LocalPlayer
 local GAMEPASS_ID = 1529221276
 local PREMIUM_LINK = "https://www.roblox.com/game-pass/1529221276/Premium"
 
--- Interface
+-- ScreenGui
 local gui = Instance.new("ScreenGui")
 gui.Name = "PremiumPrompt"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
+-- Panel
 local panel = Instance.new("Frame")
-panel.Size = UDim2.fromScale(0.34, 0.2)
+panel.Size = UDim2.fromScale(0.34, 0.22)
 panel.Position = UDim2.fromScale(0.5, 0.5)
 panel.AnchorPoint = Vector2.new(0.5, 0.5)
 panel.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
 panel.BorderSizePixel = 0
 panel.Parent = gui
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 10)
-corner.Parent = panel
+Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 10)
 
-local outline = Instance.new("UIStroke")
-outline.Color = Color3.fromRGB(160, 130, 40) -- dourado queimado
-outline.Thickness = 1
-outline.Transparency = 0.1
-outline.Parent = panel
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(160, 130, 40)
+stroke.Thickness = 1
+stroke.Transparency = 0.15
+stroke.Parent = panel
 
--- Texto Principal
+-- Close Button
+local close = Instance.new("TextButton")
+close.Size = UDim2.fromScale(0.08, 0.18)
+close.Position = UDim2.fromScale(0.92, 0.08)
+close.AnchorPoint = Vector2.new(0.5, 0.5)
+close.Text = "×"
+close.Font = Enum.Font.GothamMedium
+close.TextScaled = true
+close.TextColor3 = Color3.fromRGB(140, 140, 140)
+close.BackgroundTransparency = 1
+close.BorderSizePixel = 0
+close.Parent = panel
+
+close.MouseEnter:Connect(function()
+	TweenService:Create(close, TweenInfo.new(0.15), {
+		TextColor3 = Color3.fromRGB(200, 200, 200)
+	}):Play()
+end)
+
+close.MouseLeave:Connect(function()
+	TweenService:Create(close, TweenInfo.new(0.15), {
+		TextColor3 = Color3.fromRGB(140, 140, 140)
+	}):Play()
+end)
+
+close.MouseButton1Click:Connect(function()
+	TweenService:Create(panel, TweenInfo.new(0.25), {
+		BackgroundTransparency = 1
+	}):Play()
+	task.wait(0.25)
+	gui:Destroy()
+end)
+
+-- Title
 local title = Instance.new("TextLabel")
 title.BackgroundTransparency = 1
-title.Size = UDim2.fromScale(1, 0.4)
+title.Size = UDim2.fromScale(1, 0.35)
 title.Text = "Keyless Access"
 title.Font = Enum.Font.GothamSemibold
 title.TextScaled = true
 title.TextColor3 = Color3.fromRGB(230, 230, 230)
 title.Parent = panel
 
--- Texto Secundário
+-- Subtitle
 local sub = Instance.new("TextLabel")
 sub.BackgroundTransparency = 1
-sub.Size = UDim2.fromScale(1, 0.25)
-sub.Position = UDim2.fromScale(0, 0.35)
+sub.Size = UDim2.fromScale(1, 0.22)
+sub.Position = UDim2.fromScale(0, 0.32)
 sub.Font = Enum.Font.Gotham
 sub.TextScaled = true
-sub.TextColor3 = Color3.fromRGB(150, 150, 150)
+sub.TextColor3 = Color3.fromRGB(155, 155, 155)
 sub.Text = "Upgrade to Premium"
 sub.Parent = panel
 
--- Botão
+-- Price
+local price = Instance.new("TextLabel")
+price.BackgroundTransparency = 1
+price.Size = UDim2.fromScale(1, 0.18)
+price.Position = UDim2.fromScale(0, 0.52)
+price.Text = "only 200 robux"
+price.Font = Enum.Font.GothamMedium
+price.TextScaled = true
+price.TextColor3 = Color3.fromRGB(180, 150, 60)
+price.Parent = panel
+
+-- Button
 local btn = Instance.new("TextButton")
-btn.Size = UDim2.fromScale(0.7, 0.28)
-btn.Position = UDim2.fromScale(0.5, 0.75)
+btn.Size = UDim2.fromScale(0.7, 0.26)
+btn.Position = UDim2.fromScale(0.5, 0.8)
 btn.AnchorPoint = Vector2.new(0.5, 0.5)
 btn.Text = "Purchase"
 btn.TextColor3 = Color3.fromRGB(240, 240, 240)
@@ -71,61 +113,51 @@ btn.Parent = panel
 
 Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 8)
 
--- Animação “mordida” adulta (zoom lento e leve)
+-- Mordida adulta
 local baseSize = panel.Size
-
 task.spawn(function()
 	while task.wait(1.8) do
-		local zoomIn = TweenService:Create(panel, TweenInfo.new(0.22, Enum.EasingStyle.Linear), {
+		TweenService:Create(panel, TweenInfo.new(0.22), {
 			Size = baseSize + UDim2.fromScale(0.012, 0.012)
-		})
-
-		local zoomOut = TweenService:Create(panel, TweenInfo.new(0.22, Enum.EasingStyle.Linear), {
+		}):Play()
+		task.wait(0.22)
+		TweenService:Create(panel, TweenInfo.new(0.22), {
 			Size = baseSize
-		})
-
-		zoomIn:Play()
-		zoomIn.Completed:Wait()
-		zoomOut:Play()
+		}):Play()
 	end
 end)
 
--- Hover suave
+-- Hover botão
 btn.MouseEnter:Connect(function()
-	TweenService:Create(btn, TweenInfo.new(0.18), {
-		BackgroundColor3 = Color3.fromRGB(175, 145, 55)
+	TweenService:Create(btn, TweenInfo.new(0.15), {
+		BackgroundColor3 = Color3.fromRGB(180, 150, 60)
 	}):Play()
 end)
 
 btn.MouseLeave:Connect(function()
-	TweenService:Create(btn, TweenInfo.new(0.18), {
+	TweenService:Create(btn, TweenInfo.new(0.15), {
 		BackgroundColor3 = Color3.fromRGB(160, 130, 40)
 	}):Play()
 end)
 
--- CLICK → Prompt de compra
+-- Compra
 btn.MouseButton1Click:Connect(function()
 	local ok = pcall(function()
 		MarketplaceService:PromptGamePassPurchase(player, GAMEPASS_ID)
 	end)
 
-	-- fallback
 	if not ok then
 		pcall(function() setclipboard(PREMIUM_LINK) end)
-		btn.Text = "Copied"
-		task.wait(1.2)
-		btn.Text = "Purchase"
 	end
 end)
 
--- Se comprar, fecha UI (premium experience)
-MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(plr, id, bought)
-	if plr == player and id == GAMEPASS_ID and bought then
-		TweenService:Create(panel, TweenInfo.new(0.35), {
+-- Fecha após compra
+MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(p, id, bought)
+	if p == player and id == GAMEPASS_ID and bought then
+		TweenService:Create(panel, TweenInfo.new(0.3), {
 			BackgroundTransparency = 1
 		}):Play()
-
-		task.wait(0.35)
+		task.wait(0.3)
 		gui:Destroy()
 	end
 end)
